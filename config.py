@@ -20,7 +20,7 @@ load_dotenv(ROOT / ".env")
 # Change this to switch corpora, or pass --corpus on the command line.
 # Options are the folder names inside corpora/. See corpora/README.md.
 
-CORPUS = os.getenv("AI201_CORPUS", "campus_life")
+CORPUS = os.getenv("AI201_CORPUS", "advice_threads")
 
 
 # ─── Chunking (Milestone 3) ──────────────────────────────────────────────────
@@ -108,3 +108,4 @@ def collection_name(name: str | None = None, variant: str = "default") -> str:
     if not cleaned[-1].isalnum():
         cleaned = f"{cleaned}0"
     return cleaned[:63].rstrip("_-") or "collection"
+
