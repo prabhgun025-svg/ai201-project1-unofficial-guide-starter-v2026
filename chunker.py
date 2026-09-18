@@ -1,26 +1,3 @@
-"""
-Stage 2 of the pipeline: splitting documents into chunks.
-
-⚠️ THIS IS THE FILE YOU CHANGE IN MILESTONE 3.
-
-`split_documents` below is deliberately plain. It cuts every document into
-fixed-size pieces with a fixed overlap and pays no attention to where sentences
-or paragraphs end. It works, and it is not good.
-
-On a corpus of short posts it may not cut anything at all: `campus_life` comes
-out as 88 documents and 88 chunks, because almost nothing in it reaches 800
-characters. That is the baseline, not a bug — Milestone 3 is where you decide
-whether one post should stay one chunk.
-
-Your job in Milestone 3 is to replace the *body* of `split_documents` with a
-strategy that fits the documents you actually read in Milestone 1. Keep the
-name and the shape of what it returns — the rest of the pipeline calls it, and
-your README has to name the function that produced your chunks.
-
-If you get stuck for 30 minutes, `fallback_split` is the original. Switch back
-to it, write down what you saw, and move on. That's a real observation about
-your pipeline, not giving up.
-"""
 
 from dataclasses import dataclass
 
@@ -84,20 +61,83 @@ def split_documents(documents: list[Document]) -> list[Chunk]:
     """
     Split documents into chunks. ⚠️ REPLACE THE BODY OF THIS IN MILESTONE 3.
 
-    Right now it just calls the fallback. That is the plain, generic behaviour
-    the brief is talking about.
-
-    When you write your own strategy, set `produced_by` to
-    "chunker.py::split_documents" so your README's Sample Chunks section names
-    the right function. `app.py chunks` prints that string for you.
-
-    Things worth thinking about before you write any code:
-      - Are your documents short posts or long guides?
-      - Is the useful information in one sentence, or spread over a paragraph?
-      - Would splitting on paragraph breaks keep more thoughts intact than
-        splitting on a character count?
+    Strategy:
+    - Markdown files (city_guides): Split on ## headers — each section is its own chunk
+    - Posts with reply markers (advice_threads): Split on '--- reply' patterns
+    - Short posts (campus_life): Keep as one chunk per document
+    
+    Rationale:
+    - The 800-char fixed size cuts through logical section boundaries (headers, replies)
+    - City guides are structured around "## Getting there", "## Where to stay" etc.
+    - Advice threads have independent replies that should be separate chunks
+    - Campus life posts are ~300 chars and coherent — one per chunk
+    - Eliminates tiny "trash" chunks (2-24 chars) from uneven divisions
+    
+    Produced by: chunker.py::split_documents
     """
-    return fallback_split(documents)
+    chunks: list[Chunk] = []
+    
+    for doc in documents:
+        text = doc.text
+        doc_chunks = []
+        
+        # Check if this is a markdown file (city_guides)
+        if doc.source.endswith('.md'):
+            # Split on markdown headers (##)
+            # Include the header with its content
+            parts = text.split('## ')
+            
+            if parts[0].strip():  # If there's content before the first ##
+                doc_chunks.append(parts[0].strip())
+            
+            for part in parts[1:]:
+                chunk_text = '## ' + part.strip()
+                if chunk_text.strip():
+                    doc_chunks.append(chunk_text)
+        
+        # Check for reply markers (advice_threads)
+        elif '--- reply' in text:
+            # Split on the reply marker pattern
+            # Don't include bare thread header before first reply
+            parts = text.split('--- reply')
+            
+            for part in parts[1:]:
+                chunk_text = ('--- reply' + part).strip()
+                if chunk_text.strip():
+                    doc_chunks.append(chunk_text)
+        
+        # For other documents (campus_life style or plain advice_threads without replies)
+        else:
+            # Skip bare thread headers (lines starting with "THREAD:")
+            # They're just questions without answers
+            lines = text.split('\n')
+            filtered_lines = []
+            for line in lines:
+                if not line.strip().startswith('THREAD:'):
+                    filtered_lines.append(line)
+            
+            # Rejoin and split on paragraph breaks
+            text = '\n'.join(filtered_lines)
+            paragraphs = text.split('\n\n')
+            for para in paragraphs:
+                para = para.strip()
+                if para:  # Only add non-empty paragraphs
+                    doc_chunks.append(para)
+        
+        # Convert chunks to Chunk objects
+        for index, chunk_text in enumerate(doc_chunks):
+            # Only include chunks that have meaningful content (more than 20 chars)
+            if len(chunk_text) > 20:
+                chunks.append(
+                    Chunk(
+                        text=chunk_text,
+                        source=doc.source,
+                        index=index,
+                        produced_by="chunker.py::split_documents",
+                    )
+                )
+    
+    return chunks
 
 
 def describe(chunks: list[Chunk]) -> str:
@@ -118,3 +158,4 @@ if __name__ == "__main__":
 
     chunks = split_documents(load_documents())
     print(describe(chunks))
+
