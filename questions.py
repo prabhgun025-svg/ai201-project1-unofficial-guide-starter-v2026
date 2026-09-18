@@ -23,11 +23,11 @@ names a target of "4 of 5", and four of three is not a thing.
 
 QUESTIONS = [
     # {"question": "...", "expects": "..."},
-    {"question": "", "expects": ""},
-    {"question": "", "expects": ""},
-    {"question": "", "expects": ""},
-    {"question": "", "expects": ""},
-    {"question": "", "expects": ""},
+    {"How hard is it to change majors in the second year? Who should a student talk to": "", " switch, sciences,  depends on the major, advisor": ""},
+    {"Do transfer credits count toward the major, or only towards general education requirements": "", " count towards Gen Ed Requirements, majors is case by case. For majors, talk to your advisor about it ": ""},
+    {"Is it worth getting a campu parking permit ": "", "A parking permit is required if you are driving to campus, tradeoff is that they cost money per semester ": ""},
+    {"What are the rules for taking a course pass/fail, what is the deadline, max number": "", "pass/fail is upon course and are usually one credit to 0 credit courses such as PE. ""},
+    {"When should students start looking for summer internships and what are the limits eligilibity": "", " juniors but some prefer sophomores and above. start looking in sophomore summer": ""},
 ]
 
 # Questions from a different world entirely. Your gate should refuse all five.
@@ -43,6 +43,13 @@ OUT_OF_SCOPE = [
     "Who won the 1994 World Cup?",
     "What is the recommended dosage of ibuprofen for a headache?",
     "How do I write a for loop in Rust?",
+]
+
+
+def answered() -> list[dict]:
+    """The questions you've actually filled in."""
+    return [q for q in QUESTIONS if q.get("question", "").strip()]
+
 ]
 
 
