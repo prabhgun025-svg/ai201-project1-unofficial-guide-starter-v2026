@@ -109,9 +109,8 @@ The gap between in-corpus and out-of-scope questions is clear. All 5 in-corpus q
 | What is the history of ancient Rome? | No | 0.880 |
 
 ## How I Used AI
+ I used the AI to review the project files and explain codes that I did not understand. I also used it for advice on chunking and while I took some of its advice, the other pieces of advice it gave were either repetitive or not accurate enough so for that. It also helped me debug issues with my terminal and code and told me where I went wrong and how it can be fixed. I also used it in week 2 where I needed help tightening my requirement so I asked it what can I do differently in order to set stricter targets and rules for each of my criterion
 
-
-     I used the AI to review the project files and explain codes that I did not understand. I also used it for advice on chunking and while I took some of its advice, the other pieces of advice it gave were either repetitive or not accurate enough so for that. It also helped me debug issues with my terminal and code and told me where I went wrong and how it can be fixed. 
 
 ---
 
