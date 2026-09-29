@@ -135,54 +135,72 @@ The gap between in-corpus and out-of-scope questions is clear. All 5 in-corpus q
 
 | Criterion | Target | Run 1 | Run 2 | Run 3 | Verdict |
 |---|---|---|---|---|---|
-| 1. Retrieved chunk contains the answer | 4 of 5 |  |  |  |  |
-| 2. Every answer names a source | 5 of 5 |  |  |  |  |
-| 3. Gate stops out-of-corpus questions | 4 of 5 |  |  |  |  |
-| 4. | | | | | |
-| 5. | | | | | |
+| 1. Retrieved chunk contains the answer | 4 of 5 | 4 of 5 | 4 of 5  | 4 of 5 | MET  |
+| 2. Every answer names a source | 5 of 5 | 5 of 5 | 5 of 5  | 5 of 5 | MET |
+| 3. Gate stops out-of-corpus questions | 4 of 5 | 5 of 5 | 5 of 5 | 5 of 5 | MET|
+| 4. Chunks read as complete thoughts | 4 of 5 | 5 of 5 | 5 of 5 | 5 of 5 | MET |
+| 5. Correct source attribution and citation | 4 of 5 | 5 of 5 | 5 of 5 | 5 of 5 | MET |
 
 <!-- Underneath, paste the REAL output for each criterion from one of your
      runs — the actual text your system produced, not a description of it.
      Name the file and function that produced it. -->
+## Criterion 1: Retrieved chunk contains the answer 
+ How hard is it to change majors in the second year? Who should a student talk to? — run 1
+Best distance: 0.1658 (passed the gate)
 
+Sources retrieved: thread_changing_major.txt, thread_first_gen.txt, thread_roommate_conflict.txt, thread_transfer_credits.txt
+
+"Administratively, changing your major is trivial and only requires a form, but whether your earned credits map onto the new requirements depends enormously on the direction and the major (thread_changing_major.txt). A student should talk to the department adviser for the major they want, rather than their current one, because they know the exceptions (thread_changing_major.txt)."
+
+## Criterion 2: Every answer names a source 
+Do transfer credits count toward the major, or only towards general education requirements? — run 1
+
+Best distance: 0.1711 (passed the gate)
+Sources retrieved: thread_changing_major.txt, thread_pass_fail.txt, thread_transfer_credits.txt
+
+Transfer credits count toward general requirements almost always, while toward the major it is case-by-case and decided by the department. 
+
+Source: thread_transfer_credits.txt
+## Criterion 3: stops any out scope questions 
+refused  (best distance 0.878)  What is the capital of Mongolia?
+refused  (best distance 0.876)  How do I change the oil in a diesel engine?
+refused  (best distance 0.885)  Who won the 1994 World Cup?
+refused  (best distance 0.808)  What is the recommended dosage of ibuprofen for a headache?
+refused  (best distance 0.816)  How do I write a for loop in Rust?
+-> gate refused 5 of 5
+
+## Criterion 4: Chunks read as complete thoughts not just bricks of a sentence 
+Is it worth getting a campus parking permit? — run 1
+
+Best distance: 0.1871 (passed the gate)
+Sources retrieved: thread_bike_commute.txt, thread_commuting.txt, thread_parking.txt
+
+NJIT requires you to get a permit if you are parking on campus, and they usually cost money per semester. 
+
+Source: thread_parking.txt
+
+## Criterion 5: Correct source and citation for each answer 
+When should students start looking for summer internships and what are eligibility limits? — run 1
+
+Best distance: 0.2051 (passed the gate)
+Sources retrieved: thread_first_gen.txt, thread_internship_timing.txt, thread_parking.txt
+
+Students should start looking for summer internships earlier than feels reasonable, as large employers close applications in October and November. Regarding eligibility limits, most internships only accept students who are juniors and above, though some accept sophomores. 
+
+Source: thread_internship_timing.txt
 ## Verdicts
-
-<!-- MET or MISSED for each of the five, against the target you wrote last
-     week — not a new one. Plus a sentence on how you decided. That sentence
-     matters most where it was close.
-
-     If your target said 4 of 5 and your runs came out 4, 3, 4, that's a MISS.
-     The target has to hold, not show up occasionally.
-
-     Milestone 2. -->
 
 | # | Criterion | Verdict | How I decided |
 |---|---|---|---|
-| 1 |  |  |  |
-| 2 |  |  |  |
-| 3 |  |  |  |
-| 4 |  |  |  |
-| 5 |  |  |  |
+| 1 | Retrieved chunks include the answer | MET | at least 4 of the 5 included the chunks in the answer  |
+| 2 | Every answer names a source | MET | every answer named a source and where it got it from |
+| 3 | The relevance gate stops out-of-corpus questions | MET | the gate refused to answer all of the out of scope questions  |
+| 4 | Chunks read as complete thoughts | MET |  all of the chunks sounded like a person wrote them and did not sound too choppy or a jumble of words|
+| 5 | Correct source attribution and citation | MET | every information given from each run was cited with the source of the answer and the sources given were correct too |
 
 ## Diagnoses
 
-<!-- For each miss: which stage caused it, and how. The stage alone isn't
-     enough — you need the mechanism.
-
-     Not a diagnosis: "Question 3 didn't work."
-     A diagnosis:     "Question 3 asks about laundry costs. The answer is in
-                       one sentence that got split across two chunks, so
-                       neither chunk on its own contains it."
-
-     The five stages: loading → chunking → embedding → retrieval → generation.
-
-     Look for a pattern. If three misses all ask about numbers, that's one
-     problem, not three.
-
-     Missed nothing? Say so, then say honestly whether your targets were set
-     low, and which one you'd tighten and to what.
-
-     Milestone 3. -->
+My first round, I did not miss anything and my targets were all 4 out of 5. Due to this, I decided to tighten my requirements by making the first one (which got all 4/5 for each run), be the one I'd change. The rest of the runs got 5 out of 5 for each so I tightened only the first target and make it 5/5 as my target 
 
 ## The Improvement
 
